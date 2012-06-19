@@ -1,0 +1,11 @@
+*~
+*.o
+*.lst
+OSD.eep
+OSD.elf
+OSD.hex
+OSD.lss
+OSD.lst
+OSD.map
+OSD.sym
+.dep
