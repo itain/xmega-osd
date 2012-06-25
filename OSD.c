@@ -79,6 +79,8 @@ int main(void) {
 
 	sei();
 
+	calibrate_ADC();
+
 	// Now blink LED at 2Hz, use timer TCC0 
 	uint32_t new_micros, old_micros250ms = 0, old_micros50ms = 0, old_micros100000ms = 0;
 		
@@ -98,6 +100,8 @@ int main(void) {
 		if((uint32_t)(new_micros - old_micros100000ms) >= 100000) {
 			old_micros100000ms = new_micros;
 			UpdateClock();
+
+			read_ADC();
 		}
 	}
 }
@@ -117,7 +121,7 @@ ISR(PORTE_INT0_vect) {
 	while(!(PORTE.IN & _BV(0)))
 		;
 
-	TCE0.CCA = TCE0.CNT + 380;
+	TCE0.CCA = TCE0.CNT + 370;
 	++line_ctr;
 		
 	uint8_t *linedata;

@@ -15,16 +15,16 @@
 
 #ifdef MAIN
 #define static /*empty*/
-#include "Logo192X144.xbm"
+#include "Logo208x128.xbm"
 #undef static
 #else
-#define Logo192X144_width 208
-#define Logo192X144_height 136
-extern unsigned char Logo192X144_bits[];
+#define Logo208x128_width 208
+#define Logo208x128_height 136
+extern unsigned char Logo208x128_bits[];
 #endif
-#define Logo_bits Logo192X144_bits
-#define Logo_width Logo192X144_width
-#define Logo_height Logo192X144_height
+#define Logo_bits Logo208x128_bits
+#define Logo_width Logo208x128_width
+#define Logo_height Logo208x128_height
 
 //#define XTAL16		// use 16 MHz crystal
 void Config32MHzClock(void);
@@ -34,7 +34,9 @@ void UpdateClock(void);
 void put_char_at(uint8_t ch, uint8_t x, uint8_t y);
 uint32_t micros(void);
 void FillRectangle(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1, uint8_t val);
-void read_analog(void);
+void DrawLine(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1, uint8_t val);
+void calibrate_ADC(void);
+void read_ADC(void);
 
 extern unsigned char Logo_bits[];
 
