@@ -4,6 +4,8 @@
 
 #include "OSD.h"
 
+#include <avr/pgmspace.h>
+
 #include "Font5x7.xbm"
 
 void put_char_at(uint8_t ch, uint8_t x, uint8_t y) {
@@ -12,7 +14,7 @@ void put_char_at(uint8_t ch, uint8_t x, uint8_t y) {
 	ch =  (ch - ' ') << 3;
 
 	for(int i = 0; i < 8; i++) {
-		uint8_t b = Font5x7_bits[ch];
+		uint8_t b = pgm_read_byte(&Font5x7_bits[ch]);
 
 		uint8_t p = Logo_bits[index];
 		p |= (0x3f << x);
