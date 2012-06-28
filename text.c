@@ -4,15 +4,15 @@
 
 #include "OSD.h"
 
-#include "font.xbm"
+#include "Font5x7.xbm"
 
 void put_char_at(uint8_t ch, uint8_t x, uint8_t y) {
 	uint16_t index = y * DATASIZE + (x >> 3);
 	x &= 0x07;
-	ch <<= 3;
+	ch =  (ch - ' ') << 3;
 
 	for(int i = 0; i < 8; i++) {
-		uint8_t b = font_bits[ch];
+		uint8_t b = Font5x7_bits[ch];
 
 		uint8_t p = Logo_bits[index];
 		p |= (0x3f << x);
@@ -40,21 +40,21 @@ void UpdateClock(void) {
 		switch(i) {
 		default:
 			if(i > 5 && z == 0)
-				ch = 12;
+				ch = ' ';
 			else {
-				ch = z % 10;
+				ch = '0' + z % 10;
 				z /= 10;
 			}
 			break;
 		case 1:
-			ch = 11;
+			ch = '.';
 			break;
 		case 3:
-			ch = z % 6;
+			ch = '0' + z % 6;
 			z /= 6;
 			break;
 		case 4:
-			ch = 10;
+			ch = ':';
 			break;
 		}	
 		put_char_at(ch, 46-6*i, 4);

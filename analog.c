@@ -45,9 +45,9 @@ void read_ADC(void) {
 	for(uint8_t i = 0; i < 8; i++) {
 		uint8_t ch;
 		if(i > 1 && z == 0)
-			ch = 12;
+			ch = ' ';
 		else {
-			ch = z % 10;
+			ch = '0' + z % 10;
 			z /= 10;
 		}
 		put_char_at(ch, 46-6*i, 25);
