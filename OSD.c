@@ -2,8 +2,8 @@
 // (C) Itai Nahshon 2012
 // nahshon <at> actcom <dot> co <dot> il
 
-#define MAIN
 #include "OSD.h"
+#include <string.h>
 
 //Debug
 #ifdef DEBUG
@@ -16,6 +16,24 @@
 
 int main(void) {
 	Config32MHzClock();
+
+	memset(Screen_bits, 0xff, (Screen_width/8)*Screen_height);
+	FillRectangle(1, 1, 0, Screen_height-1, 1);
+	FillRectangle(Screen_width-2, Screen_width-2, 0, Screen_height-1, 1);
+	FillRectangle(0, Screen_width-1, 1, 1, 1);
+	FillRectangle(0, Screen_width-1, Screen_height-2, Screen_height-2, 1);
+	put_string_at_P("Itai OSD", Screen_width-2-(6*8), 3);
+
+	for(uint8_t i = 0; i < 21; i++) {
+		if((i % 5) == 0) {
+			FillRectangle(Screen_width-11, Screen_width-4, Screen_height-13-2*i, Screen_height-13-2*i, 1);
+			FillRectangle(Screen_width-13-2*i, Screen_width-13-2*i, Screen_height-11, Screen_height-4, 1);
+		}
+		else {
+			FillRectangle(Screen_width-11, Screen_width-5, Screen_height-13-2*i, Screen_height-13-2*i, 1);
+			FillRectangle(Screen_width-13-2*i, Screen_width-13-2*i, Screen_height-11, Screen_height-5, 1);
+		}
+	}
 
 	// TCC0 provides the micros() function
 	TCC0.PER = 0xffff;		// 65535
@@ -127,13 +145,13 @@ ISR(PORTE_INT0_vect) {
 	uint8_t *linedata;
 	uint8_t effective_line = (line_ctr - 46) / 2;
 
-	if(effective_line >= Logo_height) {
+	if(effective_line >= Screen_height) {
 		TCE0.INTCTRLB = 0;
 		ISR_OUT;
 		return;
 	}
 
-	linedata = &Logo_bits[DATASIZE * effective_line];
+	linedata = &Screen_bits[(Screen_width/8)*effective_line];
 
 	// Prepare timer
 	TCE0.INTCTRLB = TC_CCAINTLVL_HI_gc;
@@ -146,7 +164,7 @@ ISR(PORTE_INT0_vect) {
 	DMA.CH0.REPCNT = 1;
 	DMA.CH0.CTRLA = DMA_CH_BURSTLEN_1BYTE_gc | DMA_CH_SINGLE_bm | DMA_CH_REPEAT_bm;
 	DMA.CH0.TRIGSRC = DMA_CH_TRIGSRC_TCE0_CCA_gc;
-	DMA.CH0.TRFCNT = DATASIZE;
+	DMA.CH0.TRFCNT = Screen_width/8;
 	DMA.CH0.SRCADDR0 = (( (uint16_t) &linedata[0]) >> 0) & 0xFF;
 	DMA.CH0.SRCADDR1 = (( (uint16_t) &linedata[0]) >> 8) & 0xFF;
 	DMA.CH0.SRCADDR2 = 0;

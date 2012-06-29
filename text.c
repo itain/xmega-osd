@@ -8,29 +8,39 @@
 
 #include "Font5x7.xbm"
 
-void put_char_at(uint8_t ch, uint8_t x, uint8_t y) {
-	uint16_t index = y * DATASIZE + (x >> 3);
+void put_char_at(char ch, uint8_t x, uint8_t y) {
+	uint16_t index = y * (Screen_width/8) + (x >> 3);
+	uint16_t ix =  (ch - ' ') << 3;
 	x &= 0x07;
-	ch =  (ch - ' ') << 3;
 
-	for(int i = 0; i < 8; i++) {
-		uint8_t b = pgm_read_byte(&Font5x7_bits[ch]);
+	for(uint8_t i = 0; i < 8; i++) {
+		uint8_t b = pgm_read_byte(&Font5x7_bits[ix]);
 
-		uint8_t p = Logo_bits[index];
+		uint8_t p = Screen_bits[index];
 		p |= (0x3f << x);
 		p &= ~(b << x);
-		Logo_bits[index] = p;
+		Screen_bits[index] = p;
 
 		if(x > 2) {
 			uint8_t xx = 8-x;
-			uint8_t p = Logo_bits[index+1];
+			uint8_t p = Screen_bits[index+1];
 			p |= (0x3f >> xx);
 			p &= ~(b >> xx);
-			Logo_bits[index+1] = p;
+			Screen_bits[index+1] = p;
 		}
 
-		++ch;
-		index += DATASIZE;
+		++ix;
+		index += (Screen_width/8);
+	}
+}
+
+void put_string_at_P(const char *s, uint8_t x, uint8_t y) {
+	for(;;) {
+		char ch = *s++;
+		if(ch == 0)
+			break;
+		put_char_at(ch, x, y);
+		x += 6;
 	}
 }
 

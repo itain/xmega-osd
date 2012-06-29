@@ -136,7 +136,7 @@ void SpektrumUpdateImage(void) {
 				else
 					b = (uint8_t)~(0xff >> (7-(val & 0x07)));
 				//b = spekFrame[2*ch + (1&i)];
-				Logo_bits[DATASIZE*(j + 90 + ch * 3) + 1 + i] = b;
+				Screen_bits[(Screen_width/8)*(j + 90 + ch * 3) + 1 + i] = b;
 			}
 		}
 	}

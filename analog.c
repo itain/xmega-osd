@@ -1,7 +1,6 @@
 #include "OSD.h"
 
 #include <stddef.h>
-#include <avr/pgmspace.h>
 #include <math.h>
 
 static uint8_t ReadCalibrationByte( uint8_t index )
